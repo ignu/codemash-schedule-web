@@ -2,27 +2,57 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import R from "ramda";
 import "./App.css";
+import glamorous from 'glamorous'
 
 import sessions from "./data/sessions.js";
 
+const SessionTitle = glamorous.div({
+  fontSize: '1.5em',
+  fontWeight: 'bold'
+})
+
+const Detail = glamorous.div({
+  fontSize: '0.8em',
+  opacity: '0.5'
+})
+
+const SessionWrapper = glamorous.div({
+  borderBottom: "1px solid #999",
+  padding: 20
+})
+
+const Speaker = props => {
+  const { FirstName, LastName, GravatarUrl } = props;
+  return <div>
+    <img src={GravatarUrl} />
+    { FirstName } { LastName }
+  </div>
+}
+
 const Session = props => {
-  const { Title, Abstract, Category, Tags } = props;
+  console.log("😎 props", props);
+  const { Speakers, Title, Abstract, Category, Tags } = props;
+  console.log("😎 Speakers", Speakers);
 
   return (
-    <li>
-      <div>{Title}</div>
+    <SessionWrapper>
+      <SessionTitle>{Title}</SessionTitle>
+
+      { Speakers.map(s => <Speaker id={s.Id} {...s}/>) }
+
       <div>{Abstract}</div>
-      <div>{Category}</div>
-      <div>{Tags.join(',')}</div>
-    </li>
+      <Detail>{Category}</Detail>
+      <Detail>{Tags.join(', ')}</Detail>
+    </SessionWrapper>
   );
 };
 
 const SessionList = props => {
+  console.log("😎 props", props);
   return (<div>
-    <ul>
+    <div>
      { R.map(s => <Session key={s.Id} {...s} />, sessions) }
-    </ul>
+    </div>
   </div>)
 };
 
